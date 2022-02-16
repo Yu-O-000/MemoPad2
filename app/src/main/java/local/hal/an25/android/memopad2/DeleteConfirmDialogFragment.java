@@ -65,19 +65,21 @@ public class DeleteConfirmDialogFragment extends DialogFragment {
 				MemoDAO memoDAO = _db.createMemoDAO();
 				int result = 0;
 				ListenableFuture<Integer> future = memoDAO.delete(memo);
+
 				try {
 					result = future.get();
-				}
-				catch(ExecutionException ex) {
+
+				} catch(ExecutionException ex) {
+					Log.e("DeleteConfirmDialog", "データ更新処理失敗", ex);
+
+				} catch(InterruptedException ex) {
 					Log.e("DeleteConfirmDialog", "データ更新処理失敗", ex);
 				}
-				catch(InterruptedException ex) {
-					Log.e("DeleteConfirmDialog", "データ更新処理失敗", ex);
-				}
+
 				if(result <= 0) {
 					Toast.makeText(parent, R.string.msg_delete_error, Toast.LENGTH_SHORT).show();
-				}
-				else {
+
+				} else {
 					parent.finish();
 				}
 			}

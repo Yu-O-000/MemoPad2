@@ -43,3 +43,16 @@ public abstract class AppDatabase extends RoomDatabase {
 	 */
 	public abstract MemoDAO createMemoDAO();
 }
+
+/*
+	抽象クラスにインスタンスを保持するSingletonパターン
+
+	Room
+		... DAOの代わりを担うライブラリ？
+			※ build.gradle >> dependencies に書いて読み込む。
+
+	@Database(entities = {エンティティクラス}, version=1)
+		... RoomDatabaseを継承したクラスにつける。
+			※ エンティティクラスには @Entity をつける。
+			※ DAOクラスには @Dao をつける。
+ */

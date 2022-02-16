@@ -56,3 +56,17 @@ public class Memo {
 		return importantBool;
 	}
 }
+
+/*
+	@Entity
+		... Databaseのエンティティとして使用するクラスにつける。
+
+	@PrimaryKey(autoGenerate = true)
+		... DBのプライマリーキー。autoGenerateはオートインクリメントを表す？
+
+	@NotNull
+		... DBの NOT NULL
+
+	@ColumnInfo(defaultValue = "0")
+		... カラムに対するオプションを定義？
+ */

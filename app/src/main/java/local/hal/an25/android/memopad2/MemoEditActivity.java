@@ -51,38 +51,48 @@ public class MemoEditActivity extends AppCompatActivity {
 
 		_db = AppDatabase.getDatabase(MemoEditActivity.this);
 
+		// モード識別子の受け取り
 		Intent intent = getIntent();
 		_mode = intent.getIntExtra("mode", Consts.MODE_INSERT);
 
 		if(_mode == Consts.MODE_INSERT) {
+			// 新規登録ver
 			TextView tvTitleEdit = findViewById(R.id.tvTitleEdit);
 			tvTitleEdit.setText(R.string.tv_title_insert);
-		}
-		else {
+
+		} else {
+			// 更新ver
 			_idNo = intent.getIntExtra("idNo", 0);
-			MemoDAO memoDAO = _db.createMemoDAO();
-			ListenableFuture<Memo> future = memoDAO.findByPK(_idNo);
+			MemoDAO memoDAO = _db.createMemoDAO();								// ???
+			ListenableFuture<Memo> future = memoDAO.findByPK(_idNo);			// idで検索するクエリを取得？
+
 			try {
-				Memo memo = future.get();
+				Memo memo = future.get();										// クエリを実行？
 				EditText etInputTitle = findViewById(R.id.etInputTitle);
 				etInputTitle.setText(memo.title);
 				SwitchMaterial swImportant = findViewById(R.id.swImportant);
 				swImportant.setChecked(memo.getImportantBool());
 				EditText etInputContent = findViewById(R.id.etInputContent);
 				etInputContent.setText(memo.content);
-			}
-			catch(ExecutionException ex) {
+
+			} catch(ExecutionException ex) {
 				Log.e("MemoEditActivity", "データ取得処理失敗", ex);
-			}
-			catch(InterruptedException ex) {
+
+			} catch(InterruptedException ex) {
 				Log.e("MemoEditActivity", "データ取得処理失敗", ex);
 			}
 		}
 
+		// 戻るボタン
 		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 	}
 
+	/**
+	 * 場合に応じて異なるメニューを生成
+	 * @param menu	Menuオブジェクト
+	 * @return		true
+	 */
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();
@@ -99,53 +109,60 @@ public class MemoEditActivity extends AppCompatActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		switch(id) {
-			case R.id.btnSave:
+			case R.id.btnSave:		// 保存ボタン
 				EditText etInputTitle = findViewById(R.id.etInputTitle);
 				String inputTitle = etInputTitle.getText().toString();
+
 				if(inputTitle.equals("")) {
 					Toast.makeText(MemoEditActivity.this, R.string.msg_input_title, Toast.LENGTH_SHORT).show();
-				}
-				else {
+
+				} else {
 					EditText etInputContent = findViewById(R.id.etInputContent);
 					String inputContent = etInputContent.getText().toString();
-					SwitchMaterial swImportant = findViewById(R.id.swImportant);
+					SwitchMaterial swImportant = findViewById(R.id.swImportant);	// 重要スイッチの ON/OFFを取得？
 					int inputImportant = 0;
+
 					if(swImportant.isChecked()) {
 						inputImportant = 1;
 					}
+
 					Memo memo = new Memo();
 					memo.title = inputTitle;
 					memo.content = inputContent;
 					memo.important = inputImportant;
 					memo.updatedAt = new Timestamp(System.currentTimeMillis());
-					MemoDAO memoDAO = _db.createMemoDAO();
+					MemoDAO memoDAO = _db.createMemoDAO();							// ???
 					long result = 0;
+
 					try {
 						if(_mode == Consts.MODE_INSERT) {
-							ListenableFuture<Long> future = memoDAO.insert(memo);
-							result = future.get();
-						}
-						else {
+							ListenableFuture<Long> future = memoDAO.insert(memo);	// クエリ取得
+							result = future.get();									// クエリ実行
+
+						} else {
 							memo.id = _idNo;
-							ListenableFuture<Integer> future = memoDAO.update(memo);
-							result = future.get();
+							ListenableFuture<Integer> future = memoDAO.update(memo);// クエリ取得
+							result = future.get();									// クエリ実行
 						}
-					}
-					catch(ExecutionException ex) {
+
+					} catch(ExecutionException ex) {
+						Log.e("MemoEditActivity", "データ更新処理失敗", ex);
+
+					} catch(InterruptedException ex) {
 						Log.e("MemoEditActivity", "データ更新処理失敗", ex);
 					}
-					catch(InterruptedException ex) {
-						Log.e("MemoEditActivity", "データ更新処理失敗", ex);
-					}
+
 					if(result <= 0) {
 						Toast.makeText(MemoEditActivity.this, R.string.msg_save_error, Toast.LENGTH_SHORT).show();
-					}
-					else {
+
+					} else {
+						// ここを通るまで前の画面に戻らない
 						finish();
 					}
 				}
 				return true;
-			case R.id.btnDelete:
+
+			case R.id.btnDelete:		// 削除ボタン
 				DeleteConfirmDialogFragment dialog = new DeleteConfirmDialogFragment(_db);
 				Bundle extras = new Bundle();
 				extras.putInt("id", _idNo);
@@ -153,8 +170,10 @@ public class MemoEditActivity extends AppCompatActivity {
 				FragmentManager manager = getSupportFragmentManager();
 				dialog.show(manager, "DeleteConfirmDialogFragment");
 				return true;
-			case android.R.id.home:
+
+			case android.R.id.home:		// 戻るボタン（android.R.id.homeは共通のR値）
 				finish();
+
 			default:
 				return super.onOptionsItemSelected(item);
 		}
