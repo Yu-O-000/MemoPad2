@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
 	/*
 		noteからの編集
+		laptopからの編集
 	 */
 
 	@Override
