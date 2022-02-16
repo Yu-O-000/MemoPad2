@@ -52,13 +52,14 @@ public class MainActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
+		// RecyclerViewの設定
 		_rvMemo = findViewById(R.id.rvMemo);
 		LinearLayoutManager layout = new LinearLayoutManager(MainActivity.this);
 		_rvMemo.setLayoutManager(layout);
 		DividerItemDecoration decoration = new DividerItemDecoration(MainActivity.this, layout.getOrientation());
 		_rvMemo.addItemDecoration(decoration);
 
-		_db = AppDatabase.getDatabase(MainActivity.this);
+		_db = AppDatabase.getDatabase(MainActivity.this);	// コンテキストは何のために必要？
 	}
 
 	@Override
@@ -79,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 		MenuItem menuTitle = menu.findItem(R.id.menuTitle);
 		menuTitle.setTitle(R.string.menu_list_all);
 		if(_onlyImportant) {
+			// 重要onlyフラグによってタイトルを書き換え
 			menuTitle.setTitle(R.string.menu_list_important);
 		}
 		return super.onPrepareOptionsMenu(menu);
@@ -88,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int id = item.getItemId();
 		boolean returnVal = true;
+
 		switch(id) {
 			case R.id.menuListImportant:
 				_onlyImportant = true;
@@ -102,6 +105,7 @@ public class MainActivity extends AppCompatActivity {
 		}
 		if(returnVal) {
 			createRecyclerView();
+//			invalidateOptionsMenu();	RecyclerViewのSampleではこちらに配置していたが、なぜ今回は別々？
 		}
 		return returnVal;
 	}
@@ -113,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 	 */
 	public void onNewButtonClick(View view) {
 		Intent intent = new Intent(getApplicationContext(), MemoEditActivity.class);
-		intent.putExtra("mode", Consts.MODE_INSERT);
+		intent.putExtra("mode", Consts.MODE_INSERT);		// 画面レイアウトが変わるためモード識別子を受け渡し
 		startActivity(intent);
 	}
 
@@ -123,23 +127,25 @@ public class MainActivity extends AppCompatActivity {
 	 */
 	private void createRecyclerView() {
 		MemoDAO memoDAO = _db.createMemoDAO();
-		ListenableFuture<List<Memo>> future;
+		ListenableFuture<List<Memo>> future;		// ???
 		if(_onlyImportant) {
-			future = memoDAO.findAllImportant();
+			future = memoDAO.findAllImportant();	// 重要フラグが立っている項目のリストを取得するクエリを保存？
+
+		} else {
+			future = memoDAO.findAll();				// 全項目のリストを取得するクエリを保存？
 		}
-		else {
-			future = memoDAO.findAll();
-		}
+
 		List<Memo> memoList = new ArrayList<>();
 		try {
-			memoList = future.get();
-		}
-		catch(ExecutionException ex) {
+			memoList = future.get();				// クエリを実行？
+
+		} catch(ExecutionException ex) {
+			Log.e("MainActivity", "データ取得処理失敗", ex);
+
+		} catch(InterruptedException ex) {
 			Log.e("MainActivity", "データ取得処理失敗", ex);
 		}
-		catch(InterruptedException ex) {
-			Log.e("MainActivity", "データ取得処理失敗", ex);
-		}
+
 		MemoListAdapter adapter = new MemoListAdapter(memoList);
 		_rvMemo.setAdapter(adapter);
 	}
@@ -202,6 +208,7 @@ public class MainActivity extends AppCompatActivity {
 			holder._tvTitleRow.setText(item.title);
 			holder._tvTitleRow.setTag(item.id);
 			holder._imStarRow.setVisibility(View.INVISIBLE);
+
 			if(item.getImportantBool()) {
 				holder._imStarRow.setVisibility(View.VISIBLE);
 			}
@@ -222,9 +229,16 @@ public class MainActivity extends AppCompatActivity {
 			TextView tvTitleRow = view.findViewById(R.id.tvTitleRow);
 			int idNo = (int) tvTitleRow.getTag();
 			Intent intent = new Intent(MainActivity.this, MemoEditActivity.class);
+
 			intent.putExtra("mode", Consts.MODE_EDIT);
 			intent.putExtra("idNo", idNo);
 			startActivity(intent);
 		}
 	}
 }
+
+/*
+	新規登録時 ... mode識別子
+	更新時	   ... mode識別子、要素番号
+		を受け渡し
+ */

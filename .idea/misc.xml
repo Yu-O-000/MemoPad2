@@ -3,7 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/workspace/AndroidStudio_workspace/MemoPad2/app/src/main/res/layout/activity_main.xml" value="0.14673913043478262" />
+        <entry key="..\:/work/workspase/Androidd Studio/MemoPad2/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.471" />
+        <entry key="..\:/work/workspase/Androidd Studio/MemoPad2/app/src/main/res/drawable/ic_launcher_background.xml" value="0.471" />
+        <entry key="..\:/work/workspase/Androidd Studio/MemoPad2/app/src/main/res/layout/activity_main.xml" value="0.32971014492753625" />
+        <entry key="..\:/work/workspase/Androidd Studio/MemoPad2/app/src/main/res/layout/activity_memo_edit.xml" value="0.32971014492753625" />
+        <entry key="..\:/work/workspase/Androidd Studio/MemoPad2/app/src/main/res/layout/row_activity_main.xml" value="0.25" />
+        <entry key="..\:/work/workspase/Androidd Studio/MemoPad2/app/src/main/res/menu/menu_options_add.xml" value="0.54375" />
+        <entry key="..\:/work/workspase/Androidd Studio/MemoPad2/app/src/main/res/menu/menu_options_edit.xml" value="0.54375" />
+        <entry key="..\:/work/workspase/Androidd Studio/MemoPad2/app/src/main/res/menu/menu_options_list.xml" value="0.54375" />
       </map>
     </option>
   </component>
