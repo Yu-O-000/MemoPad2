@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+AN25 Android追加サンプル02 Room
+メモリスト画面用オプションメニューファイル
+ファイル名=menu_options_list.xml
+-->
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<item
+		android:id="@+id/menuTitle"
+		android:title="@string/menu_list_all"
+		app:showAsAction="always">
+		<menu>
+			<item
+				android:id="@+id/menuListAll"
+				android:title="@string/menu_list_all"
+				app:showAsAction="never" />
+			<item
+				android:id="@+id/menuListImportant"
+				android:title="@string/menu_list_important"
+				app:showAsAction="never" />
+		</menu>
+	</item>
+</menu>

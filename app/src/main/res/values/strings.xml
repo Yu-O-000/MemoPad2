@@ -1,0 +1,27 @@
+<!--
+AN25 Android追加サンプル02 Room
+res/values/string.xmlファイル
+-->
+<resources>
+	<string name="app_name">メモ帳2</string>
+	<!-- リスト画面用 -->
+	<string name="menu_list_all">全メモ</string>
+	<string name="menu_list_important">重要のみ</string>
+	<!-- 編集画面用 -->
+	<string name="tv_title_edit">メモ内容編集</string>
+	<string name="tv_title_insert">メモ内容登録</string>
+	<string name="tv_input_title">タイトル:</string>
+	<string name="tv_input_content">内容:</string>
+	<string name="sw_lb_important">重要</string>
+	<string name="msg_input_title">タイトルを入力してください。</string>
+	<string name="msg_save_error">データ更新に失敗しました。もう一度、操作を行ってください。</string>
+	<string name="btn_save">更新</string>
+	<string name="btn_insert">登録</string>
+	<string name="btn_delete">削除</string>
+	<!-- 削除確認ダイアログ用 -->
+	<string name="del_dialog_title">確認!</string>
+	<string name="del_dialog_message">このメモを削除してもよろしいですか?</string>
+	<string name="del_dialog_positive">削除</string>
+	<string name="del_dialog_negative">キャンセル</string>
+	<string name="msg_delete_error">データ削除に失敗しました。もう一度、操作を行ってください。</string>
+</resources>
