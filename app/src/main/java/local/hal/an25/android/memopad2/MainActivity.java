@@ -47,6 +47,11 @@ public class MainActivity extends AppCompatActivity {
 	 */
 	private AppDatabase _db;
 
+	/*
+		noteからの編集
+		laptopからの編集
+	 */
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
