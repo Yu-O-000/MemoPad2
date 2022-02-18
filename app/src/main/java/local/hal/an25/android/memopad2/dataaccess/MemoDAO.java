@@ -43,6 +43,9 @@ public interface MemoDAO {
 	 */
 	@Query("SELECT * FROM memo WHERE id = :id")
 	ListenableFuture<Memo> findByPK(int id);
+		/*
+			:引数名 ... バインド変数。（psの?と同じ）
+		 */
 
 	/**
 	 * メモ情報を新規登録するメソッド。
@@ -71,3 +74,15 @@ public interface MemoDAO {
 	@Delete
 	ListenableFuture<Integer> delete(Memo memo);
 }
+
+/*
+	insert, update, delete はSQL不要。
+
+	戻り値
+		update, delete 	の戻り値はInteger（更新削除件数）
+		insert			の戻り値はLong（主キー）
+			Q. 文字列型の戻り値はどうなる？
+				A. 要検証、SQLiteは主キーを文字列で扱わないほうがいいかも
+		select			の戻り値はList（１行文）
+		※ すべて共通で、ListenableFuture（非同期処理用のクラス）の中に入れる。
+ */

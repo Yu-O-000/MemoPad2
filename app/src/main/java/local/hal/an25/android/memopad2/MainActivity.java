@@ -47,11 +47,6 @@ public class MainActivity extends AppCompatActivity {
 	 */
 	private AppDatabase _db;
 
-	/*
-		noteからの編集
-		laptopからの編集
-	 */
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 		DividerItemDecoration decoration = new DividerItemDecoration(MainActivity.this, layout.getOrientation());
 		_rvMemo.addItemDecoration(decoration);
 
-		_db = AppDatabase.getDatabase(MainActivity.this);	// コンテキストは何のために必要？
+		_db = AppDatabase.getDatabase(MainActivity.this);
 	}
 
 	@Override
@@ -99,18 +94,16 @@ public class MainActivity extends AppCompatActivity {
 		switch(id) {
 			case R.id.menuListImportant:
 				_onlyImportant = true;
-				invalidateOptionsMenu();
 				break;
 			case R.id.menuListAll:
 				_onlyImportant = false;
-				invalidateOptionsMenu();
 				break;
 			default:
 				returnVal = super.onOptionsItemSelected(item);
 		}
 		if(returnVal) {
 			createRecyclerView();
-//			invalidateOptionsMenu();	RecyclerViewのSampleではこちらに配置していたが、なぜ今回は別々？
+			invalidateOptionsMenu();
 		}
 		return returnVal;
 	}
@@ -132,17 +125,17 @@ public class MainActivity extends AppCompatActivity {
 	 */
 	private void createRecyclerView() {
 		MemoDAO memoDAO = _db.createMemoDAO();
-		ListenableFuture<List<Memo>> future;		// ???
+		ListenableFuture<List<Memo>> future;
 		if(_onlyImportant) {
-			future = memoDAO.findAllImportant();	// 重要フラグが立っている項目のリストを取得するクエリを保存？
+			future = memoDAO.findAllImportant();	// 重要フラグが立っている項目のリストを取得（ListenableFuture）
 
 		} else {
-			future = memoDAO.findAll();				// 全項目のリストを取得するクエリを保存？
+			future = memoDAO.findAll();				// 重要フラグが立っている項目のリストを取得（ListenableFuture）
 		}
 
 		List<Memo> memoList = new ArrayList<>();
 		try {
-			memoList = future.get();				// クエリを実行？
+			memoList = future.get();				// ListenableFuture から Entity を取得
 
 		} catch(ExecutionException ex) {
 			Log.e("MainActivity", "データ取得処理失敗", ex);

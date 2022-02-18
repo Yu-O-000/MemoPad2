@@ -15,7 +15,7 @@ import androidx.room.TypeConverters;
  * @author Shinzo SAITO
  */
 @Database(entities = {Memo.class}, version=1)
-@TypeConverters({TimestampConverter.class})
+@TypeConverters({TimestampConverter.class})			// 型変換用のクラスをアノテーションで指定
 public abstract class AppDatabase extends RoomDatabase {
 	/**
 	 * データベースインスタンス。
@@ -31,7 +31,13 @@ public abstract class AppDatabase extends RoomDatabase {
 	 */
 	public static AppDatabase getDatabase(Context context) {
 		if (_instance == null) {
-			_instance = Room.databaseBuilder(context.getApplicationContext(), AppDatabase.class, "memo_db").build();
+			_instance = Room.databaseBuilder
+					(context.getApplicationContext(), AppDatabase.class, "memo_db").build();
+				/*
+					・context.getApplicationContext() ... activityのコンテキストではなく、アプリケーション全体のコンテキスト。
+					・AppDatabase.class ... 自分自身
+					・"memo_db" ... db名
+				 */
 		}
 		return _instance;
 	}
@@ -42,17 +48,32 @@ public abstract class AppDatabase extends RoomDatabase {
 	 * @return MemoDAOオブジェクト。
 	 */
 	public abstract MemoDAO createMemoDAO();
+		/*
+			中身は自動生成される。（メソッド名は自由、戻り値は必ず〇〇DAOなので、そこで判定してる？）
+		 */
 }
 
 /*
 	抽象クラスにインスタンスを保持するSingletonパターン
 
 	Room
-		... DAOの代わりを担うライブラリ？
+		... DBからDAOまでの非同期処理を生成するためのライブラリ
 			※ build.gradle >> dependencies に書いて読み込む。
+
+			※ Roomはオブジェクト自体をDBとしてデータを保持？
+				Q. Singletonのインスタンスに格納しているのだとしたら、Buildしなおしたら消えるのでは？
+					A. 最終的にSQLite上に保存してるので問題なし。
 
 	@Database(entities = {エンティティクラス}, version=1)
 		... RoomDatabaseを継承したクラスにつける。
 			※ エンティティクラスには @Entity をつける。
-			※ DAOクラスには @Dao をつける。
+			※ DAOインターフェースには @Dao をつける。
+
+	Javaの代入
+		・プリミティブ型は実態を複製
+		・オブジェクト型は参照先を代入
+
+	Javaのトランザクション
+		・SQL上でトランザクションの処理を書くこともできるが、Javaでもできる。
+			DAOと合わせるので、Java側でやったほうがいいかも。
  */

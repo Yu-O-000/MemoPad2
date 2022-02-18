@@ -63,11 +63,11 @@ public class MemoEditActivity extends AppCompatActivity {
 		} else {
 			// 更新ver
 			_idNo = intent.getIntExtra("idNo", 0);
-			MemoDAO memoDAO = _db.createMemoDAO();								// ???
-			ListenableFuture<Memo> future = memoDAO.findByPK(_idNo);			// idで検索するクエリを取得？
+			MemoDAO memoDAO = _db.createMemoDAO();
+			ListenableFuture<Memo> future = memoDAO.findByPK(_idNo);
 
 			try {
-				Memo memo = future.get();										// クエリを実行？
+				Memo memo = future.get();
 				EditText etInputTitle = findViewById(R.id.etInputTitle);
 				etInputTitle.setText(memo.title);
 				SwitchMaterial swImportant = findViewById(R.id.swImportant);
@@ -131,18 +131,23 @@ public class MemoEditActivity extends AppCompatActivity {
 					memo.content = inputContent;
 					memo.important = inputImportant;
 					memo.updatedAt = new Timestamp(System.currentTimeMillis());
-					MemoDAO memoDAO = _db.createMemoDAO();							// ???
+					MemoDAO memoDAO = _db.createMemoDAO();
 					long result = 0;
 
 					try {
 						if(_mode == Consts.MODE_INSERT) {
-							ListenableFuture<Long> future = memoDAO.insert(memo);	// クエリ取得
-							result = future.get();									// クエリ実行
+							ListenableFuture<Long> future = memoDAO.insert(memo);
+//							finish();	※ ここでfinish()を実行するとSQLが実行されたことにはならないらしい。
+							result = future.get();		// SQL文の完了を同期するための処理
+								/*
+									get() まで行かないとSQLが実行されたことにはならないらしい。
+										※ get()をせずにfinish()すると、非同期処理なのでSQL実行を待たずに次の処理が走ってしまう。
+								 */
 
 						} else {
 							memo.id = _idNo;
-							ListenableFuture<Integer> future = memoDAO.update(memo);// クエリ取得
-							result = future.get();									// クエリ実行
+							ListenableFuture<Integer> future = memoDAO.update(memo);
+							result = future.get();
 						}
 
 					} catch(ExecutionException ex) {

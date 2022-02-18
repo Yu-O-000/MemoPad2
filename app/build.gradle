@@ -29,10 +29,13 @@ android {
 
 dependencies {
     def room_version = "2.4.1"
+    // room使用時必須
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"
-    implementation "androidx.room:room-guava:$room_version"
-    implementation "com.google.guava:guava:31.0.1-android"
+
+    // 以下オプション
+    implementation "androidx.room:room-guava:$room_version"     // Guava要
+    implementation "com.google.guava:guava:31.0.1-android"      // Guava要
 
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'

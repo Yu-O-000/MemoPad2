@@ -42,3 +42,7 @@ public class TimestampConverter {
 		return returnVal;
 	}
 }
+
+/*
+	to[Javaの型]メソッド, to[SQLite型]メソッド, それぞれ@TypeConverter で、Roomがデータ型を自動変換してくれる。
+ */

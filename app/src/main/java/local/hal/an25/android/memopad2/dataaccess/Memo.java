@@ -58,15 +58,21 @@ public class Memo {
 }
 
 /*
+
 	@Entity
-		... Databaseのエンティティとして使用するクラスにつける。
+		... Databaseのエンティティとして使用するクラスにつける。このEntityをテーブルとして作成。
+			※ @Entity(tableName = "テーブル名") でEntityクラス名とは別のテーブル名を指定できる。
 
 	@PrimaryKey(autoGenerate = true)
-		... DBのプライマリーキー。autoGenerateはオートインクリメントを表す？
+		... DBのプライマリーキー。autoGenerateはオートインクリメントを表す
 
 	@NotNull
 		... DBの NOT NULL
 
 	@ColumnInfo(defaultValue = "0")
-		... カラムに対するオプションを定義？
+		... カラムに対するオプションを定義
+			※ (name = "カラム名") で変数名と別名のカラム名を指定
+
+	データ型はJavaと対応。
+		※ Date型も存在しないので、Timestampは変換が必要。
  */
